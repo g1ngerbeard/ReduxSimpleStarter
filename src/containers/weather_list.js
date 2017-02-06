@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 import {connect} from 'react-redux';
 import WeatherChart from '../components/weather_chart';
+import CityMap from '../components/city_map';
 
 class WeatherList extends Component {
     constructor(props) {
@@ -13,10 +14,10 @@ class WeatherList extends Component {
             <table className="table table-hover">
                 <thead>
                 <tr>
-                    <th className="col-md-1">City</th>
-                    <th className="col-md-2">Temperature (K)</th>
-                    <th className="col-md-2">Pressure (hPa)</th>
-                    <th className="col-md-2">Humidity (%)</th>
+                    <th>City</th>
+                    <th>Temperature (K)</th>
+                    <th>Pressure (hPa)</th>
+                    <th>Humidity (%)</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -26,17 +27,19 @@ class WeatherList extends Component {
         );
     }
 
-    renderRow(weatherItem) {
-        const measurements = weatherItem.list;
-        const name = weatherItem.city.name;
+    renderRow(cityData) {
+        const measurements = cityData.list;
+        const name = cityData.city.name;
 
         const tempData = measurements.map(item => item.main.temp);
         const humidityData = measurements.map(item => item.main.humidity);
         const pressureData = measurements.map(item => item.main.pressure);
 
+        const {lat, lon} = cityData.city.coord;
+
         return (
             <tr key={name}>
-                <td>{name}</td>
+                <td><CityMap lon={lon} lat={lat}/></td>
                 <td><WeatherChart data={tempData} color="orange" units="K"/></td>
                 <td><WeatherChart data={humidityData} color="blue" units="hPa"/></td>
                 <td><WeatherChart data={pressureData} color="green" units="%"/></td>
